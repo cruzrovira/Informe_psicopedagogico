@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Psicopedagógico - Universidad Don Bosco</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        udb: {
+                            navy: '#00205B',
+                            darkNavy: '#00143B',
+                            gold: '#FAA61A',
+                            goldHover: '#E09210',
+                            lightBg: '#F4F6F9',
+                            cardBg: '#FFFFFF',
+                            accent: '#0284C7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        title: ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #00143B;
+            color: #1E293B;
+            overflow: hidden;
+        }
+
+        .slide-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide-enter-right {
+            opacity: 0;
+            transform: translateX(60px);
+        }
+
+        .slide-enter-left {
+            opacity: 0;
+            transform: translateX(-60px);
+        }
+
+        .slide-active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Custom Scrollbar for slide contents */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .udb-gradient-header {
+            background: linear-gradient(135deg, #00205B 0%, #00143B 100%);
+        }
+
+        .gold-badge {
+            background: linear-gradient(135deg, #FAA61A 0%, #D97706 100%);
+            color: #00143B;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col select-none antialiased">
+
+    <!-- TOP HEADER / NAVBAR -->
+    <header class="udb-gradient-header text-white border-b border-blue-900/50 px-4 py-2.5 flex items-center justify-between z-30 shadow-md shrink-0">
+        <!-- Logo & Title -->
+        <div class="flex items-center space-x-3">
+            <div class="bg-white p-1.5 rounded-lg shadow-sm flex items-center justify-center">
+                <i class="fa-solid fa-graduation-cap text-udb-navy text-xl"></i>
+            </div>
+            <div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-udb-gold">Universidad Don Bosco</span>
+                    <span class="text-gray-400 text-xs">|</span>
+                    <span class="text-xs text-blue-200">Curso de Formación Pedagógica</span>
+                </div>
+                <h1 class="text-sm font-semibold text-white tracking-tight hidden sm:block">
+                    Informe de Análisis Psicopedagógico del Grupo Clase
+                </h1>
+            </div>
+        </div>
+
+        <!-- Controls Toolbar -->
+        <div class="flex items-center space-x-2">
+            <!-- Slide Counter -->
+            <div class="bg-blue-950/80 border border-blue-800 text-blue-100 text-xs px-3 py-1.5 rounded-full font-mono flex items-center space-x-1">
+                <span id="current-slide-num">1</span>
+                <span>/</span>
+                <span id="total-slides-num">8</span>
+            </div>
+
+            <!-- Grid Menu Toggle -->
+            <button onclick="toggleGridMenu()" title="Menú de Diapositivas" class="p-2 text-blue-200 hover:text-white hover:bg-blue-800/60 rounded-lg transition-colors">
+                <i class="fa-solid fa-grid-2-plus text-base"></i>
+                <i class="fa-solid fa-th-large text-base"></i>
+            </button>
+
+            <!-- Speaker Notes Toggle -->
+            <button onclick="toggleNotesDrawer()" id="notes-btn" title="Notas del Expositor" class="p-2 text-blue-200 hover:text-white hover:bg-blue-800/60 rounded-lg transition-colors relative">
+                <i class="fa-solid fa-note-sticky text-base"></i>
+            </button>
+
+            <!-- Fullscreen Button -->
+            <button onclick="toggleFullScreen()" title="Pantalla Completa" class="p-2 text-blue-200 hover:text-white hover:bg-blue-800/60 rounded-lg transition-colors">
+                <i id="fullscreen-icon" class="fa-solid fa-expand text-base"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN SLIDE VIEWER CONTAINER -->
+    <main class="flex-1 relative overflow-hidden bg-slate-900 flex items-center justify-center p-2 sm:p-4 md:p-6">
+        
+        <!-- SLIDE 1: PORTADA & PRESENTACIÓN INSTITUCIONAL -->
+        <section id="slide-1" class="slide-active w-full max-w-6xl h-full max-h-[85vh] bg-slate-50 rounded-2xl shadow-2xl overflow-hidden flex flex-col border border-slate-200/80">
+            <!-- Header bar of the slide -->
+            <div class="bg-udb-navy text-white px-6 py-4 flex justify-between items-center border-b-4 border-udb-gold">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-udb-gold font-bold">Módulo 2: Psicología del Desarrollo y Aprendizaje</span>
+                    <h2 class="text-xl md:text-2xl font-title font-bold leading-tight">Experiencia de Aprendizaje: Análisis Psicopedagógico</h2>
+                </div>
+                <div class="hidden md:flex items-center space-x-2 bg-blue-900/60 px-3 py-1.5 rounded-lg border border-blue-700/50">
+                    <i class="fa-solid fa-users-rectangle text-udb-gold"></i>
+                    <span class="text-xs font-semibold">Grupo 5</span>
+                </div>
+            </div>
+
+            <!-- Slide Content Body -->
+            <div class="flex-1 p-6 md:p-8 overflow-y-auto custom-scrollbar flex flex-col justify-between space-y-6">
+                <!-- Main Title Box -->
+                <div class="bg-gradient-to-r from-blue-900 to-udb-navy text-white rounded-xl p-6 shadow-lg relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 opacity-10 text-white">
+                        <i class="fa-solid fa-boxes-packing text-9xl"></i>
+                    </div>
+                    <div class="relative z-10 max-w-3xl">
+                        <span class="inline-block bg-udb-gold text-udb-darkNavy text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-3">
+                            Tercer Año de Bachillerato en Logística y Aduanas
+                        </span>
+                        <h3 class="text-2xl sm:text-3xl font-title font-bold text-white mb-2">
+                            Gestión Básica de la Cadena de Suministro
+                        </h3>
+                        <p class="text-blue-100 text-sm md:text-base leading-relaxed">
+                            Análisis integral del proceso de aprendizaje, competencias cognitivas, socioemocionales y adecuaciones psicopedagógicas a partir de la resolución de inventarios y control de existencias.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Interactive Cards Grid for Metadata -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Facilitador Card -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex items-start space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 text-udb-navy flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs uppercase font-bold text-slate-400 tracking-wider">Facilitador del Módulo</span>
+                            <h4 class="text-lg font-bold text-slate-800">Dr. David Jacob Romero García</h4>
+                            <p class="text-xs text-slate-500 mt-1"></p>
+                        </div>
+                    </div>
+
+                    <!-- Target Group Context Quick Card -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex items-start space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-users-viewfinder"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs uppercase font-bold text-slate-400 tracking-wider">Población de Estudio</span>
+                            <h4 class="text-lg font-bold text-slate-800">20 Estudiantes (16 a 18 años)</h4>
+                            <p class="text-xs text-slate-500 mt-1">Transición de Adolescencia Media a Tardía • Modalidad Parejas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Members Section -->
+                <div class="bg-slate-100/80 p-4 rounded-xl border border-slate-200">
+                    <div class="flex items-center space-x-2 mb-3">
+                        <i class="fa-solid fa-people-group text-udb-navy"></i>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Integrantes del Equipo de Investigación - Grupo 5</h4>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                        <div class="bg-white px-3 py-2 rounded-lg border border-slate-200 font-medium text-slate-700 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-user text-udb-gold"></i>
+                            <span class="truncate">Marcia Cecilia García de Zelaya</span>
+                        </div>
+                        <div class="bg-white px-3 py-2 rounded-lg border border-slate-200 font-medium text-slate-700 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-user text-udb-gold"></i>
+                            <span class="truncate">Ulises Esaí Pérez Flores</span>
+                        </div>
+                        <div class="bg-white px-3 py-2 rounded-lg border border-slate-200 font-medium text-slate-700 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-user text-udb-gold"></i>
+                            <span class="truncate">Roberto Iván Melgar Fuentes</span>
+                        </div>
+                        <div class="bg-white px-3 py-2 rounded-lg border border-slate-200 font-medium text-slate-700 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-user text-udb-gold"></i>
+                            <span class="truncate">Oscar Alfredo Cruz Rovira</span>
+                        </div>
+                        <div class="bg-white px-3 py-2 rounded-lg border border-slate-200 font-medium text-slate-700 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-user text-udb-gold"></i>
+                            <span class="truncate">Pedro Luis Bonilla Medrano</span>
+                        </div>
+                        <div class="bg-white px-3 py-2 rounded-lg border border-slate-200 font-medium text-slate-700 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-user text-udb-gold"></i>
+                            <span class="truncate">Keiry Antonio Bermúdez Meléndez</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: SITUACIÓN DE APRENDIZAJE Y CONTEXTUALIZACIÓN -->
+        <section id="slide-2" class="hidden w-full max-w-6xl h-full max-h-[85vh] bg-slate-50 rounded-2xl shadow-2xl overflow-hidden flex-col border border-slate-200/80">
+            <!-- Header bar -->
+            <div class="bg-udb-navy text-white px-6 py-4 flex justify-between items-center border-b-4 border-udb-gold">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-udb-gold font-bold">Sección 2 & 3: Contexto y Desafío</span>
+                    <h2 class="text-xl md:text-2xl font-title font-bold leading-tight">Situación de Aprendizaje: Control de Existencias</h2>
+                </div>
+                <div class="bg-blue-900/60 px-3 py-1.5 rounded-lg border border-blue-700/50 text-xs text-white">
+                    <i class="fa-solid fa-truck-ramp-box text-udb-gold mr-1"></i> Logística y Aduanas
+                </div>
+            </div>
+
+            <div class="flex-1 p-6 md:p-8 overflow-y-auto custom-scrollbar space-y-6">
+                <!-- Case Scenario Card -->
+                <div class="bg-white rounded-xl p-5 border-l-4  shadow-sm">
+                    <div class="flex items-center space-x-3 mb-2">
+                        <span class="p-2 bg-amber-100 text-amber-800 rounded-lg text-lg"><i class="fa-solid fa-clipboard-question"></i></span>
+                        <h3 class="text-lg font-bold text-slate-800">¿Qué productos debemos reponer antes de quedarnos sin existencias?</h3>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Una pequeña empresa necesita revisar su inventario para identificar qué productos requieren reposición inmediata y evitar desabastecimiento. Los estudiantes asumen el rol de equipo encargado de control de existencias.
+                    </p>
+                </div>
+
+                <!-- Interactive Workflow Steps (Click to highlight detail) -->
+                <div class="space-y-3">
+                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Metodología Didáctica y Dinámica de Trabajo</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                        <!-- Step 1 -->
+                        <div onclick="highlightStep(1)" id="step-card-1" class="cursor-pointer bg-white p-4 rounded-xl border-2 border-slate-200 hover:border-udb-navy transition-all shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="w-7 h-7 rounded-full bg-blue-100 text-udb-navy font-bold text-xs flex items-center justify-center">1</span>
+                                <i class="fa-solid fa-users text-slate-400"></i>
+                            </div>
+                            <h5 class="font-bold text-slate-800 text-sm mb-1">Trabajo en Parejas</h5>
+                            <p class="text-xs text-slate-500">Alternación de roles: lectura, cálculo y verificación comparativa.</p>
+                        </div>
+                        <!-- Step 2 -->
+                        <div onclick="highlightStep(2)" id="step-card-2" class="cursor-pointer bg-white p-4 rounded-xl border-2 border-slate-200 hover:border-udb-navy transition-all shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="w-7 h-7 rounded-full bg-blue-100 text-udb-navy font-bold text-xs flex items-center justify-center">2</span>
+                                <i class="fa-solid fa-calculator text-slate-400"></i>
+                            </div>
+                            <h5 class="font-bold text-slate-800 text-sm mb-1">Regla Didáctica</h5>
+                            <p class="text-xs text-slate-500">Pedir solo la cantidad exacta para alcanzar el mínimo (Existencia &lt; Mínimo).</p>
+                        </div>
+                        <!-- Step 3 -->
+                        <div onclick="highlightStep(3)" id="step-card-3" class="cursor-pointer bg-white p-4 rounded-xl border-2 border-slate-200 hover:border-udb-navy transition-all shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="w-7 h-7 rounded-full bg-blue-100 text-udb-navy font-bold text-xs flex items-center justify-center">3</span>
+                                <i class="fa-solid fa-pen-to-square text-slate-400"></i>
+                            </div>
+                            <h5 class="font-bold text-slate-800 text-sm mb-1">Registro y Justificación</h5>
+                            <p class="text-xs text-slate-500">Tabla con producto, necesidad de pedido, cantidad y explicación en datos.</p>
+                        </div>
+                        <!-- Step 4 -->
+                        <div onclick="highlightStep(4)" id="step-card-4" class="cursor-pointer bg-white p-4 rounded-xl border-2 border-slate-200 hover:border-udb-navy transition-all shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="w-7 h-7 rounded-full bg-blue-100 text-udb-navy font-bold text-xs flex items-center justify-center">4</span>
+                                <i class="fa-solid fa-graduation-cap text-slate-400"></i>
+                            </div>
+                            <h5 class="font-bold text-slate-800 text-sm mb-1">Cierre Individual</h5>
+                            <p class="text-xs text-slate-500">Comprobación de autonomía en un caso nuevo con toma de decisiones breve.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Detail Box for Selected Step -->
+                <div id="step-detail-box" class="bg-blue-50/80 p-4 rounded-xl border border-blue-200 text-xs text-blue-900 flex items-start space-x-3">
+                    <i class="fa-solid fa-circle-info text-udb-navy text-lg shrink-0 mt-0.5"></i>
+                    <div>
+                        <strong class="font-bold" id="step-detail-title">Regla Pedagógica Clave:</strong>
+                        <p id="step-detail-desc" class="mt-0.5">Si la existencia es igual o superior al nivel mínimo, la reposición es 0. Si está por debajo, se solicita la diferencia exacta. Esta simplificación técnica permite evaluar la comprensión operativa del estudiante antes de incluir variables avanzadas como demanda o tiempo de entrega.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: HALLAZGOS Y NIVELES DE ANÁLISIS -->
+        <section id="slide-3" class="hidden w-full max-w-6xl h-full max-h-[85vh] bg-slate-50 rounded-2xl shadow-2xl overflow-hidden flex-col border border-slate-200/80">
+            <!-- Header bar -->
+            <div class="bg-udb-navy text-white px-6 py-4 flex justify-between items-center border-b-4 border-udb-gold">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-udb-gold font-bold">Sección 3: Hallazgos de la Observación</span>
+                    <h2 class="text-xl md:text-2xl font-title font-bold leading-tight">Análisis Tripartito de la Observación en Aula</h2>
+                </div>
+                <div class="bg-blue-900/60 px-3 py-1.5 rounded-lg border border-blue-700/50 text-xs text-white">
+                    <i class="fa-solid fa-magnifying-glass text-udb-gold mr-1"></i> Evidencia Directa
+                </div>
+            </div>
+
+            <div class="flex-1 p-6 md:p-8 overflow-y-auto custom-scrollbar flex flex-col space-y-4">
+                <p class="text-xs md:text-sm text-slate-600">
+                    
+                </p>
+
+                <!-- Interactive 3 Column Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
+                    <!-- Column 1: Observaciones -->
+                    <div class="bg-white p-5 rounded-xl border-t-4 border-blue-600 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center space-x-2 text-blue-600 mb-3">
+                                <i class="fa-solid fa-eye text-lg"></i>
+                                <h3 class="font-bold text-slate-800 text-sm">1. Observaciones Planteadas</h3>
+                            </div>
+                            <ul class="space-y-2 text-xs text-slate-600">
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-chevron-right text-blue-500 text-[10px] mt-1 shrink-0"></i>
+                                    <span>Algunas parejas identifican los productos pero confunden el nivel mínimo con la cantidad a solicitar.</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-chevron-right text-blue-500 text-[10px] mt-1 shrink-0"></i>
+                                    <span>La participación oral plenaria se concentra en un grupo reducido de estudiantes.</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-chevron-right text-blue-500 text-[10px] mt-1 shrink-0"></i>
+                                    <span>Estudiantes menos participativos oralmente argumentan adecuadamente por escrito.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-blue-700 font-semibold">
+                            <i class="fa-solid fa-chart-simple mr-1"></i> Comportamiento Manifiesto
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Interpretaciones -->
+                    <div class="bg-white p-5 rounded-xl border-t-4 border-amber-500 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center space-x-2 text-amber-600 mb-3">
+                                <i class="fa-solid fa-brain text-lg"></i>
+                                <h3 class="font-bold text-slate-800 text-sm">2. Interpretaciones Posibles</h3>
+                            </div>
+                            <ul class="space-y-2 text-xs text-slate-600">
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-chevron-right text-amber-500 text-[10px] mt-1 shrink-0"></i>
+                                    <span>Dificultades en la comprensión semántica de los términos o sobrecarga de la consigna.</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-chevron-right text-amber-500 text-[10px] mt-1 shrink-0"></i>
+                                    <span>Hablar poco en voz alta no evidencia falta de aprendizaje; refleja estilos de respuesta.</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-chevron-right text-amber-500 text-[10px] mt-1 shrink-0"></i>
+                                    <span>Necesidad de andamiaje explícito para traducir datos en explicaciones lógicas.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-amber-700 font-semibold">
+                            <i class="fa-solid fa-lightbulb mr-1"></i> Hipótesis Psicopedagógica
+                        </div>
+                    </div>
+
+                    <!-- Column 3: Aspectos por Indagar -->
+                    <div class="bg-white p-5 rounded-xl border-t-4 border-emerald-500 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center space-x-2 text-emerald-600 mb-3">
+                                <i class="fa-solid fa-circle-question text-lg"></i>
+                                <h3 class="font-bold text-slate-800 text-sm">3. Aspectos por Indagar</h3>
+                            </div>
+                            <ul class="space-y-2 text-xs text-slate-600">
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-chevron-right text-emerald-500 text-[10px] mt-1 shrink-0"></i>
+                                    <span>Comprobar la transferencia de aprendizaje en casos individuales nuevos sin apoyo.</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-chevron-right text-emerald-500 text-[10px] mt-1 shrink-0"></i>
+                                    <span>Identificar condiciones específicas del entorno que facilitan la participación oral/activa.</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-chevron-right text-emerald-500 text-[10px] mt-1 shrink-0"></i>
+                                    <span>Verificar la equidad en la rotación de funciones dentro de la pareja.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-emerald-700 font-semibold">
+                            <i class="fa-solid fa-compass mr-1"></i> Guía para Futuras Sesiones
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: DESARROLLO ADOLESCENTE Y PROCESOS COGNITIVOS -->
+        <section id="slide-4" class="hidden w-full max-w-6xl h-full max-h-[85vh] bg-slate-50 rounded-2xl shadow-2xl overflow-hidden flex-col border border-slate-200/80">
+            <!-- Header bar -->
+            <div class="bg-udb-navy text-white px-6 py-4 flex justify-between items-center border-b-4 border-udb-gold">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-udb-gold font-bold">Secciones 4 & 5: Fundamentación Teórica</span>
+                    <h2 class="text-xl md:text-2xl font-title font-bold leading-tight">Procesos Cognitivos e Implicaciones de Desarrollo</h2>
+                </div>
+                <div class="bg-blue-900/60 px-3 py-1.5 rounded-lg border border-blue-700/50 text-xs text-white">
+                    <i class="fa-solid fa-layer-group text-udb-gold mr-1"></i> Gaete (2015)
+                </div>
+            </div>
+
+            <div class="flex-1 p-6 md:p-8 overflow-y-auto custom-scrollbar space-y-5">
+                <!-- Development Context Banner -->
+                <div class="bg-blue-950 text-white p-4 rounded-xl flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-user-graduate text-udb-gold text-2xl"></i>
+                        <div>
+                            <h4 class="font-bold text-sm">Transición Adolescencia Media a Tardía (16 - 18 años)</h4>
+                            <p class="text-xs text-blue-200">Ampliación del razonamiento abstracto, anticipación de consecuencias y consolidación de la autonomía.</p>
+                        </div>
+                    </div>
+                    <span class="hidden sm:inline-block bg-blue-800 text-blue-200 text-xs px-3 py-1 rounded-full border border-blue-700">Gaete, 2015</span>
+                </div>
+
+                <!-- Interactive Cognitive Matrix Tabs -->
+                <div class="space-y-3">
+                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Matriz de Procesos Cognitivos Implicados</h4>
+                    
+                    <!-- Tabs Header -->
+                    <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-2">
+                        <button onclick="selectCogTab('percepcion')" id="cog-tab-percepcion" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-udb-navy text-white shadow-sm">
+                            <i class="fa-solid fa-eye mr-1"></i> Percepción
+                        </button>
+                        <button onclick="selectCogTab('atencion')" id="cog-tab-atencion" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-200">
+                            <i class="fa-solid fa-bullseye mr-1"></i> Atención
+                        </button>
+                        <button onclick="selectCogTab('memoria')" id="cog-tab-memoria" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-200">
+                            <i class="fa-solid fa-hard-drive mr-1"></i> Memoria
+                        </button>
+                        <button onclick="selectCogTab('lenguaje')" id="cog-tab-lenguaje" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-200">
+                            <i class="fa-solid fa-comments mr-1"></i> Lenguaje
+                        </button>
+                        <button onclick="selectCogTab('pensamiento')" id="cog-tab-pensamiento" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-200">
+                            <i class="fa-solid fa-puzzle-piece mr-1"></i> Pensamiento
+                        </button>
+                    </div>
+
+                    <!-- Tab Display Content Box -->
+                    <div id="cog-tab-content" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                        <!-- Dynamic JS Content loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: FACTORES, FORTALEZAS Y BARRERAS -->
+        <section id="slide-5" class="hidden w-full max-w-6xl h-full max-h-[85vh] bg-slate-50 rounded-2xl shadow-2xl overflow-hidden flex-col border border-slate-200/80">
+            <!-- Header bar -->
+            <div class="bg-udb-navy text-white px-6 py-4 flex justify-between items-center border-b-4 border-udb-gold">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-udb-gold font-bold">Secciones 6 & 7: Diagnóstico Contextual</span>
+                    <h2 class="text-xl md:text-2xl font-title font-bold leading-tight">Análisis de Factores, Fortalezas y Barreras</h2>
+                </div>
+                <div class="bg-blue-900/60 px-3 py-1.5 rounded-lg border border-blue-700/50 text-xs text-white">
+                    <i class="fa-solid fa-shield-halved text-udb-gold mr-1"></i> Evaluación Integral
+                </div>
+            </div>
+
+            <div class="flex-1 p-6 md:p-8 overflow-y-auto custom-scrollbar space-y-6">
+                <!-- 3 Dimensions Factors Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Factores Personales -->
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center space-x-2 text-indigo-700 font-bold text-sm mb-2">
+                            <i class="fa-solid fa-user"></i>
+                            <span>Factores Personales</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Conocimientos previos y disposición a la autorevisión. Diversidad en ritmos y estilos de aprendizaje que exigen apoyos flexibles.
+                        </p>
+                    </div>
+
+                    <!-- Factores Educativos -->
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center space-x-2 text-teal-700 font-bold text-sm mb-2">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                            <span>Factores Educativos</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Aporte de sentido práctico mediante la tarea logística. Riesgo de instrucciones ambiguas o vocabulario técnico sin glosario previo.
+                        </p>
+                    </div>
+
+                    <!-- Factores Contextuales -->
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center space-x-2 text-rose-700 font-bold text-sm mb-2">
+                            <i class="fa-solid fa-house-laptop"></i>
+                            <span>Factores Contextuales</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Disponibilidad de material físico impreso e infraestructura adecuada. Las condiciones familiares o de conectividad se indagan sin presuposiciones.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Fortalezas vs Barreras Interactive Split -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Fortalezas -->
+                    <div class="bg-emerald-50/70 p-5 rounded-xl border border-emerald-200">
+                        <div class="flex items-center space-x-2 text-emerald-800 font-bold text-sm mb-3">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                            <span>Fortalezas Identificadas</span>
+                        </div>
+                        <ul class="space-y-2 text-xs text-emerald-900">
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-check text-emerald-600 mt-0.5"></i>
+                                <span>Capacidad para intercambiar y contrastar procedimientos en parejas.</span>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-check text-emerald-600 mt-0.5"></i>
+                                <span>Dominio adecuado de operaciones matemáticas elementales (restas de inventario).</span>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-check text-emerald-600 mt-0.5"></i>
+                                <span>Demostración de aprendizajes mediante modalidades alternativas (escrita vs oral).</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Barreras & Apoyos -->
+                    <div class="bg-amber-50/70 p-5 rounded-xl border border-amber-200">
+                        <div class="flex items-center space-x-2 text-amber-800 font-bold text-sm mb-3">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
+                            <span>Posibles Barreras y Apoyos Requeridos</span>
+                        </div>
+                        <ul class="space-y-2 text-xs text-amber-900">
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-arrow-right text-amber-600 mt-0.5"></i>
+                                <span>Confusión entre "mínimo" y "cantidad a pedir" &rarr; <strong>Modelado explícito.</strong></span>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-arrow-right text-amber-600 mt-0.5"></i>
+                                <span>Distribución desigual de la tarea &rarr; <strong>Rotación asignada de roles.</strong></span>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-arrow-right text-amber-600 mt-0.5"></i>
+                                <span>Evaluación centrada solo en plenaria oral &rarr; <strong>Formatos de respuesta mixtos.</strong></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: PLAN EDUCATIVO ESTRATÉGICO -->
+        <section id="slide-6" class="hidden w-full max-w-6xl h-full max-h-[85vh] bg-slate-50 rounded-2xl shadow-2xl overflow-hidden flex-col border border-slate-200/80">
+            <!-- Header bar -->
+            <div class="bg-udb-navy text-white px-6 py-4 flex justify-between items-center border-b-4 border-udb-gold">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-udb-gold font-bold">Sección 8: Propuesta de Intervención</span>
+                    <h2 class="text-xl md:text-2xl font-title font-bold leading-tight">Plan Educativo Estratégico de Intervención</h2>
+                </div>
+                <div class="bg-blue-900/60 px-3 py-1.5 rounded-lg border border-blue-700/50 text-xs text-white">
+                    <i class="fa-solid fa-list-check text-udb-gold mr-1"></i> Plan de Acción
+                </div>
+            </div>
+
+            <div class="flex-1 p-6 md:p-8 overflow-y-auto custom-scrollbar space-y-4">
+                <p class="text-xs text-slate-600">
+                    A continuación se resumen las 5 acciones pedagógicas prioritarias con sus respectivas evidencias de avance:
+                </p>
+
+                <!-- Plan Table / Interactive Accordion -->
+                <div class="space-y-2.5">
+                    <!-- Action 1 -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex items-center space-x-3 md:w-1/3">
+                            <span class="w-8 h-8 rounded-lg bg-blue-100 text-udb-navy font-bold text-xs flex items-center justify-center shrink-0">1</span>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-xs">Recuperar Conocimientos</h4>
+                                <p class="text-[11px] text-slate-500">Preguntar qué significan existencia, mínimo y reposición.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-700 md:w-2/3 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-check text-emerald-600 shrink-0"></i>
+                            <span><strong>Evidencia de Avance:</strong> Explicaciones orales/escritas que diferencian claramente los 3 conceptos técnicos.</span>
+                        </div>
+                    </div>
+
+                    <!-- Action 2 -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex items-center space-x-3 md:w-1/3">
+                            <span class="w-8 h-8 rounded-lg bg-blue-100 text-udb-navy font-bold text-xs flex items-center justify-center shrink-0">2</span>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-xs">Modelar el Procedimiento</h4>
+                                <p class="text-[11px] text-slate-500">Resolver un ejemplo guiado explicando cada paso lógico.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-700 md:w-2/3 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-check text-emerald-600 shrink-0"></i>
+                            <span><strong>Evidencia de Avance:</strong> Aplicación autónoma y correcta de la regla en un producto subsiguiente.</span>
+                        </div>
+                    </div>
+
+                    <!-- Action 3 -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex items-center space-x-3 md:w-1/3">
+                            <span class="w-8 h-8 rounded-lg bg-blue-100 text-udb-navy font-bold text-xs flex items-center justify-center shrink-0">3</span>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-xs">Distribuir Responsabilidades</h4>
+                                <p class="text-[11px] text-slate-500">Alternar funciones de lectura, cálculo y verificación en pareja.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-700 md:w-2/3 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-check text-emerald-600 shrink-0"></i>
+                            <span><strong>Evidencia de Avance:</strong> Aportes activos y balanceados constatados en ambos integrantes.</span>
+                        </div>
+                    </div>
+
+                    <!-- Action 4 -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex items-center space-x-3 md:w-1/3">
+                            <span class="w-8 h-8 rounded-lg bg-blue-100 text-udb-navy font-bold text-xs flex items-center justify-center shrink-0">4</span>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-xs">Apoyar la Argumentación</h4>
+                                <p class="text-[11px] text-slate-500">Usar guía: «La existencia es X, el mínimo es Y, por eso...».</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-700 md:w-2/3 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-check text-emerald-600 shrink-0"></i>
+                            <span><strong>Evidencia de Avance:</strong> Decisiones debidamente justificadas con datos objetivos y coherencia.</span>
+                        </div>
+                    </div>
+
+                    <!-- Action 5 -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex items-center space-x-3 md:w-1/3">
+                            <span class="w-8 h-8 rounded-lg bg-blue-100 text-udb-navy font-bold text-xs flex items-center justify-center shrink-0">5</span>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-xs">Comprobar Autonomía</h4>
+                                <p class="text-[11px] text-slate-500">Presentar caso individual nuevo y retomar en la siguiente sesión.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-700 md:w-2/3 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-check text-emerald-600 shrink-0"></i>
+                            <span><strong>Evidencia de Avance:</strong> Resolución técnica correcta con menor requerimiento de apoyo docente.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: SIMULADOR INTERACTIVO DE INVENTARIO -->
+        <section id="slide-7" class="hidden w-full max-w-6xl h-full max-h-[85vh] bg-slate-50 rounded-2xl shadow-2xl overflow-hidden flex-col border border-slate-200/80">
+            <!-- Header bar -->
+            <div class="bg-udb-navy text-white px-6 py-4 flex justify-between items-center border-b-4 border-udb-gold">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-udb-gold font-bold">Laboratorio Interactivo</span>
+                    <h2 class="text-xl md:text-2xl font-title font-bold leading-tight">Simulador del Ejercicio de Inventario y Reposición</h2>
+                </div>
+                <div class="bg-blue-900/60 px-3 py-1.5 rounded-lg border border-blue-700/50 text-xs text-white">
+                    <i class="fa-solid fa-flask text-udb-gold mr-1"></i> Aplicación Práctica
+                </div>
+            </div>
+
+            <div class="flex-1 p-6 md:p-8 overflow-y-auto custom-scrollbar flex flex-col space-y-4">
+                <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-900 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-lightbulb text-amber-600 text-base"></i>
+                        <span><strong>Pruebe el razonamiento del estudiante:</strong> Ingrese o ajuste las existencias para verificar cómo se aplica la regla de reposición en tiempo real.</span>
+                    </div>
+                    <button onclick="resetSimulator()" class="bg-amber-200 hover:bg-amber-300 text-amber-900 px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors">
+                        Restablecer
+                    </button>
+                </div>
+
+                <!-- Simulator Table -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider border-b border-slate-200">
+                            <tr>
+                                <th class="p-3">Producto</th>
+                                <th class="p-3 text-center">Existencia Actual</th>
+                                <th class="p-3 text-center">Nivel Mínimo</th>
+                                <th class="p-3 text-center">¿Requiere Reposición?</th>
+                                <th class="p-3 text-center">Cantidad a Solicitar</th>
+                                <th class="p-3">Justificación en Datos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sim-tbody" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Rows dynamically populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Cognitive Insight Footer -->
+                <div class="bg-blue-900 text-white p-4 rounded-xl flex items-start space-x-3 text-xs">
+                    <i class="fa-solid fa-brain text-udb-gold text-lg shrink-0 mt-0.5"></i>
+                    <div>
+                        <strong class="font-bold text-udb-gold">Análisis Cognitivo en Vivo:</strong>
+                        <p class="text-blue-100 mt-0.5" id="sim-cognitive-feedback">
+                            Cuando Existencia &lt; Mínimo, el estudiante aplica un pensamiento condicional y matemático básico. Si la existencia es mayor o igual, la respuesta correcta es 0 (no se requiere pedido).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: CONCLUSIONES Y REFERENCIAS -->
+        <section id="slide-8" class="hidden w-full max-w-6xl h-full max-h-[85vh] bg-slate-50 rounded-2xl shadow-2xl overflow-hidden flex-col border border-slate-200/80">
+            <!-- Header bar -->
+            <div class="bg-udb-navy text-white px-6 py-4 flex justify-between items-center border-b-4 border-udb-gold">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-udb-gold font-bold">Secciones 9 & 10: Cierre del Informe</span>
+                    <h2 class="text-xl md:text-2xl font-title font-bold leading-tight">Conclusiones y Referencias Bibliográficas</h2>
+                </div>
+                <div class="bg-blue-900/60 px-3 py-1.5 rounded-lg border border-blue-700/50 text-xs text-white">
+                    <i class="fa-solid fa-book-bookmark text-udb-gold mr-1"></i> Síntesis Final
+                </div>
+            </div>
+
+            <div class="flex-1 p-6 md:p-8 overflow-y-auto custom-scrollbar space-y-6">
+                <!-- Conclusions Box -->
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                    <h3 class="text-sm font-bold text-udb-navy uppercase tracking-wider flex items-center space-x-2">
+                        <i class="fa-solid fa-flag-checkered text-udb-gold"></i>
+                        <span>Conclusiones Psicopedagógicas Clave</span>
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-700">
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <strong class="text-slate-900 font-bold block mb-1">Integración Técnica y Cognitiva:</strong>
+                            La actividad logra articular razonamiento matemático, lenguaje técnico y trabajo colaborativo en logística.
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <strong class="text-slate-900 font-bold block mb-1">Observación del Proceso:</strong>
+                            Es primordial evaluar la construcción lógica del resultado y no limitarse únicamente a la exactitud numérica final.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- References List -->
+                <div class="bg-slate-100 p-5 rounded-xl border border-slate-200">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-quote-left text-udb-navy"></i>
+                        <span>Referencias Bibliográficas Utilizadas</span>
+                    </h4>
+                    <ul class="space-y-2 text-xs text-slate-700 font-mono">
+                        <li class="bg-white p-2.5 rounded-lg border border-slate-200">
+                            Gaete, V. (2015). Desarrollo psicosocial del adolescente. <em>Revista Chilena de Pediatría</em>, 86(6), 436–443. https://doi.org/10.1016/j.rchipe.2015.07.005
+                        </li>
+                        <li class="bg-white p-2.5 rounded-lg border border-slate-200">
+                            Universidad Don Bosco. (s. f.). <em>Los procesos cognitivos en el aprendizaje</em> [Separata 3 del curso Psicología del Desarrollo y Aprendizaje].
+                        </li>
+                        <li class="bg-white p-2.5 rounded-lg border border-slate-200">
+                            Universidad Don Bosco. (s. f.). <em>Una mirada amplia a las diferencias en el aprendizaje</em> [Separata 6 del curso Psicología del Desarrollo y Aprendizaje].
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- End Banner / Actions -->
+                <div class="flex items-center justify-between pt-2">
+                    <button onclick="goToSlide(1)" class="bg-udb-navy hover:bg-blue-900 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors flex items-center space-x-2">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Reiniciar Presentación</span>
+                    </button>
+                    <span class="text-xs text-slate-500 italic">Informe escrito por Grupo 5 - Universidad Don Bosco</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER CONTROLS BAR -->
+    <footer class="bg-udb-darkNavy text-white px-4 py-3 border-t border-blue-900/60 flex items-center justify-between z-20 shrink-0">
+        <!-- Prev Button -->
+        <button onclick="prevSlide()" id="prev-btn" class="bg-blue-900 hover:bg-blue-800 disabled:opacity-40 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-colors flex items-center space-x-2">
+            <i class="fa-solid fa-chevron-left"></i>
+            <span class="hidden sm:inline">Anterior</span>
+        </button>
+
+        <!-- Progress Indicator & Slide Title Pill -->
+        <div class="flex flex-col items-center space-y-1 max-w-md w-full px-4">
+            <div class="w-full bg-blue-950 rounded-full h-1.5 overflow-hidden border border-blue-800">
+                <div id="progress-bar" class="bg-udb-gold h-full w-1/8 transition-all duration-300"></div>
+            </div>
+            <span id="slide-title-pill" class="text-[11px] font-medium text-blue-200 truncate max-w-xs sm:max-w-md">
+                1. Presentación e Introducción
+            </span>
+        </div>
+
+        <!-- Next Button -->
+        <button onclick="nextSlide()" id="next-btn" class="bg-udb-gold hover:bg-udb-goldHover text-udb-darkNavy font-bold text-xs px-4 py-2 rounded-lg transition-colors flex items-center space-x-2 shadow-sm">
+            <span class="hidden sm:inline">Siguiente</span>
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </footer>
+
+    <!-- SLIDE GRID OVERVIEW MODAL -->
+    <div id="grid-menu-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex-col justify-center items-center p-4 sm:p-6">
+        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden flex flex-col shadow-2xl border border-slate-200">
+            <div class="bg-udb-navy text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="font-title font-bold text-lg flex items-center space-x-2">
+                    <i class="fa-solid fa-th-large text-udb-gold"></i>
+                    <span>Índice de Diapositivas</span>
+                </h3>
+                <button onclick="toggleGridMenu()" class="text-blue-200 hover:text-white text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto custom-scrollbar grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" id="grid-thumbnails-container">
+                <!-- Populated dynamically via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SPEAKER NOTES DRAWER -->
+    <div id="notes-drawer" class="fixed bottom-14 left-0 right-0 bg-slate-900/95 border-t-2 border-udb-gold text-white p-5 z-40 hidden shadow-2xl backdrop-blur-md">
+        <div class="max-w-5xl mx-auto flex flex-col space-y-2">
+            <div class="flex items-center justify-between text-xs text-udb-gold font-bold uppercase tracking-wider">
+                <span class="flex items-center space-x-2">
+                    <i class="fa-solid fa-note-sticky"></i>
+                    <span>Guía del Expositor / Apuntes Psicopedagógicos</span>
+                </span>
+                <button onclick="toggleNotesDrawer()" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+            </div>
+            <p id="speaker-note-text" class="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+                <!-- Populated via JS -->
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // PRESENTATION DATA STATE
+        const TOTAL_SLIDES = 8;
+        let currentSlide = 1;
+
+        const slideTitles = [
+            "1. Presentación e Introducción Institutional",
+            "2. Situación de Aprendizaje y Contexto",
+            "3. Hallazgos Observados y Niveles de Análisis",
+            "4. Desarrollo Adolescente y Procesos Cognitivos",
+            "5. Análisis de Factores, Fortalezas y Barreras",
+            "6. Plan Educativo Estratégico",
+            "7. Simulador Interactivo de Inventario",
+            "8. Conclusiones y Referencias Bibliográficas"
+        ];
+
+        const speakerNotes = [
+            "Presente al equipo de trabajo (Grupo 5) y contextualice que este informe analiza el aprendizaje en el Módulo de Gestión Básica de la Cadena de Suministro bajo la tutoría del Dr. David Jacob Romero García.",
+            "Describa la situación problémica en la pequeña empresa. Destaque que la regla del cálculo (Existencia < Mínimo) es una simplification intencionada para evaluar competencias lógicas primarias.",
+            "Enfatice el nivel de análisis tripartito: 1) Lo que vimos, 2) Lo que interpretamos sin diagnosticar individualmente, y 3) Lo que debemos seguir indagando en futuras sesiones.",
+            "Explique la interacción entre los 5 procesos cognitivos. Recuerde la referencia de Gaete (2015) sobre la madurez en la adolescencia tardía y el razonamiento abstracto.",
+            "Destaque la tridimensionalidad del análisis (Factores Personales, Educativos y Contextuales). Resalte que hablar poco no es falta de aprendizaje.",
+            "Recorra las 5 acciones estratégicas del plan psicopedagógico. Muestre cómo cada acción cuenta con una evidencia clara de avance y seguimiento.",
+            "Realice una demostración en vivo con el simulador de inventario. Ingrese valores para demostrar cómo se aplican las reglas de reposición y la lógica cognitiva del estudiante.",
+            "Cierre la exposición sintetizando la importancia de evaluar los procesos y no solo los resultados numéricos. Mencione las fuentes oficiales del curso de la Universidad Don Bosco."
+        ];
+
+        // COGNITIVE MATRIX TAB DATA
+        const cogData = {
+            percepcion: {
+                title: "Percepción",
+                icon: "fa-eye",
+                app: "Distinguir encabezados de tabla, cantidades disponibles y unidades requeridas.",
+                support: "Presentar tablas impresas con alta legibilidad, contraste adecuado y señalar explícitamente el significado técnico de cada columna."
+            },
+            atencion: {
+                title: "Atención",
+                icon: "fa-bullseye",
+                app: "Mantener la correspondencia exacta entre el producto y sus datos correspondientes.",
+                support: "Dividir la tarea en pasos secuenciales breves y realizar verificación fila por fila mediante una regla física o señalador."
+            },
+            memoria: {
+                title: "Memoria",
+                icon: "fa-hard-drive",
+                app: "Recuperar conceptos previos de inventario y operaciones aritméticas de resta.",
+                support: "Mantener visible la regla pedagógica en la pizarra y relacionarla continuamente con ejemplos cotidianos del entorno."
+            },
+            lenguaje: {
+                title: "Lenguaje",
+                icon: "fa-comments",
+                app: "Comprender términos técnicos (existencia, mínimo, reposición) y verbalizar justificaciones.",
+                support: "Utilizar un glosario impreso visible y plantear guías o estructuras de oraciones para argumentar."
+            },
+            pensamiento: {
+                title: "Pensamiento",
+                icon: "fa-puzzle-piece",
+                app: "Comparar existencias con el nivel mínimo, aplicar condiciones lógicas y comprobar resultados.",
+                support: "Contrastar casos donde la existencia es inferior, igual o superior al mínimo para afianzar el razonamiento de reposición."
+            }
+        };
+
+        // INITIALIZATION
+        window.onload = function() {
+            updateSlideUI();
+            buildGridThumbnails();
+            selectCogTab('percepcion');
+            initSimulator();
+            setupKeyboardNav();
+        };
+
+        // NAVIGATION LOGIC
+        function goToSlide(slideNum) {
+            if (slideNum < 1 || slideNum > TOTAL_SLIDES) return;
+            
+            // Hide current slide
+            document.getElementById(`slide-${currentSlide}`).classList.add('hidden');
+            document.getElementById(`slide-${currentSlide}`).classList.remove('flex');
+
+            currentSlide = slideNum;
+
+            // Show new slide
+            const newSlide = document.getElementById(`slide-${currentSlide}`);
+            newSlide.classList.remove('hidden');
+            newSlide.classList.add('flex');
+
+            updateSlideUI();
+        }
+
+        function nextSlide() {
+            if (currentSlide < TOTAL_SLIDES) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        function updateSlideUI() {
+            document.getElementById('current-slide-num').innerText = currentSlide;
+            document.getElementById('total-slides-num').innerText = TOTAL_SLIDES;
+            document.getElementById('slide-title-pill').innerText = slideTitles[currentSlide - 1];
+            document.getElementById('speaker-note-text').innerText = speakerNotes[currentSlide - 1];
+
+            // Update Progress Bar
+            const progressPercent = (currentSlide / TOTAL_SLIDES) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Buttons state
+            document.getElementById('prev-btn').disabled = (currentSlide === 1);
+            document.getElementById('next-btn').disabled = (currentSlide === TOTAL_SLIDES);
+        }
+
+        // KEYBOARD NAVIGATION
+        function setupKeyboardNav() {
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                } else if (e.key === 'f' || e.key === 'F') {
+                    toggleFullScreen();
+                } else if (e.key === 'Escape') {
+                    closeGridMenu();
+                }
+            });
+        }
+
+        // FULLSCREEN
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+                document.getElementById('fullscreen-icon').className = 'fa-solid fa-compress text-base';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+                document.getElementById('fullscreen-icon').className = 'fa-solid fa-expand text-base';
+            }
+        }
+
+        // GRID MENU OVERVIEW
+        function toggleGridMenu() {
+            const modal = document.getElementById('grid-menu-modal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                closeGridMenu();
+            }
+        }
+
+        function closeGridMenu() {
+            const modal = document.getElementById('grid-menu-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function buildGridThumbnails() {
+            const container = document.getElementById('grid-thumbnails-container');
+            container.innerHTML = '';
+
+            slideTitles.forEach((title, idx) => {
+                const num = idx + 1;
+                const thumb = document.createElement('div');
+                thumb.className = `p-4 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between h-32 ${num === currentSlide ? 'border-udb-gold bg-amber-50' : 'border-slate-200 bg-slate-50 hover:border-udb-navy'}`;
+                thumb.onclick = () => {
+                    goToSlide(num);
+                    closeGridMenu();
+                };
+
+                thumb.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="w-6 h-6 rounded-full bg-udb-navy text-white text-xs font-bold flex items-center justify-center">${num}</span>
+                        <i class="fa-solid fa-file-powerpoint text-slate-400"></i>
+                    </div>
+                    <p class="text-xs font-bold text-slate-800 line-clamp-2 mt-2">${title}</p>
+                    <span class="text-[10px] text-slate-500 font-semibold uppercase">Diapositiva ${num}</span>
+                `;
+
+                container.appendChild(thumb);
+            });
+        }
+
+        // SPEAKER NOTES DRAWER
+        function toggleNotesDrawer() {
+            const drawer = document.getElementById('notes-drawer');
+            const btn = document.getElementById('notes-btn');
+            if (drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                btn.classList.add('bg-blue-800', 'text-udb-gold');
+            } else {
+                drawer.classList.add('hidden');
+                btn.classList.remove('bg-blue-800', 'text-udb-gold');
+            }
+        }
+
+        // SLIDE 2 STEP HIGHLIGHT
+        function highlightStep(stepNum) {
+            for (let i = 1; i <= 4; i++) {
+                const card = document.getElementById(`step-card-${i}`);
+                if (i === stepNum) {
+                    card.classList.add('border-udb-navy', 'bg-blue-50/50', 'shadow-md');
+                } else {
+                    card.classList.remove('border-udb-navy', 'bg-blue-50/50', 'shadow-md');
+                }
+            }
+
+            const titles = [
+                "Trabajo en Parejas:",
+                "Regla Didáctica de Cálculo:",
+                "Registro y Justificación Escrita:",
+                "Cierre e Indagación Individual:"
+            ];
+
+            const descs = [
+                "Promueve el diálogo entre iguales, la negociación de roles y el andamiaje mutuo durante la interpretación de la tabla de inventario.",
+                "Se solicita únicamente la cantidad para alcanzar el mínimo (Si Existencia < Mínimo). Si la existencia es igual o superior, no se realiza pedido.",
+                "Permite observar la estructuración lógica del estudiante más allá de su expresión oral en plenaria pública.",
+                "Comprueba la autonomía y transferencia del conocimiento a través de un ejercicio práctico sin acompañamiento docente directo."
+            ];
+
+            document.getElementById('step-detail-title').innerText = titles[stepNum - 1];
+            document.getElementById('step-detail-desc').innerText = descs[stepNum - 1];
+        }
+
+        // SLIDE 4 COGNITIVE TABS
+        function selectCogTab(key) {
+            const data = cogData[key];
+            if (!data) return;
+
+            // Update button styles
+            Object.keys(cogData).forEach(k => {
+                const btn = document.getElementById(`cog-tab-${k}`);
+                if (k === key) {
+                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-udb-navy text-white shadow-sm";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-200";
+                }
+            });
+
+            // Render content
+            const contentBox = document.getElementById('cog-tab-content');
+            contentBox.innerHTML = `
+                <div class="flex items-center space-x-3 text-udb-navy border-b border-slate-100 pb-3">
+                    <span class="w-10 h-10 rounded-xl bg-blue-100 text-udb-navy flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid ${data.icon}"></i>
+                    </span>
+                    <div>
+                        <h4 class="font-bold text-base text-slate-800">Proceso Cognitivo: ${data.title}</h4>
+                        <span class="text-xs text-slate-500">Aplicación práctica en el módulo de Logística y Aduanas</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-1">
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                        <span class="font-bold text-slate-700 block mb-1 text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-list-check text-udb-navy mr-1"></i> Aplicación en la Actividad
+                        </span>
+                        <p class="text-slate-600 leading-relaxed">${data.app}</p>
+                    </div>
+
+                    <div class="bg-amber-50/80 p-3.5 rounded-xl border border-amber-200">
+                        <span class="font-bold text-amber-900 block mb-1 text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-hand-holding-hand text-amber-600 mr-1"></i> Apoyo Pedagógico Recomendado
+                        </span>
+                        <p class="text-amber-900 leading-relaxed">${data.support}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // SLIDE 7 INVENTORY SIMULATOR LOGIC
+        const initialSimData = [
+            { name: "Aceite Vegetal 1L", stock: 8, min: 20 },
+            { name: "Harina de Trigo 1kg", stock: 15, min: 15 },
+            { name: "Leche Entera 1L", stock: 25, min: 10 },
+            { name: "Azúcar Blanca 1kg", stock: 4, min: 12 }
+        ];
+
+        let simData = JSON.parse(JSON.stringify(initialSimData));
+
+        function initSimulator() {
+            renderSimulator();
+        }
+
+        function resetSimulator() {
+            simData = JSON.parse(JSON.stringify(initialSimData));
+            renderSimulator();
+        }
+
+        function updateSimStock(index, newStock) {
+            const val = parseInt(newStock) || 0;
+            simData[index].stock = Math.max(0, val);
+            renderSimulator();
+        }
+
+        function renderSimulator() {
+            const tbody = document.getElementById('sim-tbody');
+            tbody.innerHTML = '';
+
+            let totalNeedsCount = 0;
+
+            simData.forEach((item, idx) => {
+                const needsOrder = item.stock < item.min;
+                const qtyToOrder = needsOrder ? (item.min - item.stock) : 0;
+                if (needsOrder) totalNeedsCount++;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors";
+
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-slate-800">${item.name}</td>
+                    <td class="p-3 text-center">
+                        <input type="number" value="${item.stock}" min="0" onchange="updateSimStock(${idx}, this.value)"
+                            class="w-16 text-center bg-slate-100 border border-slate-300 rounded-md py-1 px-1 font-mono font-bold text-slate-800 focus:bg-white focus:border-udb-navy focus:outline-none">
+                    </td>
+                    <td class="p-3 text-center font-mono font-semibold text-slate-600">${item.min}</td>
+                    <td class="p-3 text-center">
+                        ${needsOrder 
+                            ? '<span class="bg-rose-100 text-rose-800 text-[11px] font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Sí</span>' 
+                            : '<span class="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-circle-check mr-1"></i> No</span>'
+                        }
+                    </td>
+                    <td class="p-3 text-center font-mono font-bold text-slate-900">
+                        <span class="${needsOrder ? 'text-rose-600 text-sm' : 'text-slate-400'}">${qtyToOrder}</span>
+                    </td>
+                    <td class="p-3 text-xs text-slate-600">
+                        ${needsOrder 
+                            ? `La existencia (${item.stock}) es menor al mínimo (${item.min}). Se solicitan ${qtyToOrder} unidades.`
+                            : `La existencia (${item.stock}) cubre o supera el mínimo (${item.min}). No se requiere reposición.`
+                        }
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+
+            // Update cognitive summary feedback based on active state
+            const feedbackEl = document.getElementById('sim-cognitive-feedback');
+            if (totalNeedsCount === 0) {
+                feedbackEl.innerText = "Actualmente ningún producto está por debajo del mínimo. El estudiante debe concluir que todas las cantidades a pedir son 0, demostrando comprensión de la condición sin realizar cálculos innecesarios.";
+            } else {
+                feedbackEl.innerText = `Actualmente ${totalNeedsCount} producto(s) requiere(n) reposición. El estudiante aplica la resta (Mínimo - Existencia) únicamente en los casos que cumplen la condición previa (Existencia < Mínimo).`;
+            }
+        }
+    </script>
+</body>
+</html>
